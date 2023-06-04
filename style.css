@@ -1,98 +1,150 @@
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 body {
-	margin: 0;
-	font-family: monospace;
-	padding-block: 3rem;
-	line-height: 1.5;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
 }
 
-input,
-button,
-select,
-textarea {
-	font: inherit;
+#chatbot-container {
+  --chb-accent-color: #f2c94c;
+  --chb-border-radius: 100vw;
+
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow-y: auto;
+  padding-block: 2rem;
 }
 
-.button {
-	cursor: pointer;
+#chatbot-container[aria-hidden="false"] {
+    display: none;
 }
 
-.button.primary {
-	background-color: teal;
-	color: #fff;
+#chatbot-container[aria-hidden="true"] {
+    display: block;
 }
 
-.card {
-	width: min(100% - 2rem, 40rem);
-	margin-inline: auto;
-	background-color: #f4f4f4;
-	padding: 1.5rem;
-	border-radius: 0.5rem;
+#chatbot-container * {
+  box-sizing: border-box;
 }
 
-.card__header {
-	text-align: center;
+.chb-wrapper {
+  display: grid;
+  gap: 1rem;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  width: min(100% - 2rem, 60rem);
+  margin-inline: auto;
+  position: relative;
 }
 
-.card__body {
-	/*border: 1px solid red;*/
-	padding-block: 1rem;
-	display: grid;
-	gap: 1rem;
+.chb__messages {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.messages {
-	display: grid;
-	gap: 0.5rem;
+.chb__message {
+  width: 80%;
+  padding: 0.5em 1.5em;
+  background-color: #f2f2f2;
+  border-radius: 0.25em;
 }
 
-.message {
-	padding: 0.5em 1em;
-	border-radius: 0.25rem;
+@media (width < 40em) {
+  .chb__message {
+    width: 100%;
+  }
 }
 
-.message[data-message="server"] {
-	background-color: #eee;
+.chb__message[data-chb-message="server"] {
+  justify-self: start;
+  background-color: #fff;
 }
 
-.message[data-message="client"] {
-	background-color: #ddd;
+.chb__message[data-chb-message="client"] {
+  justify-self: end;
+  background-color: #ddd;
 }
 
-.message::before {
-	content: attr(data-message) ": ";
-	text-transform: capitalize;
-	font-weight: bold;
+.chb__header {
+  display: grid;
+  gap: 0.5rem;
+  text-align: center;
+  color: #fff;
+  background-color: #333;
+  padding: 1rem;
 }
 
-.card__form {
-	display: flex;
-	gap: 0.5rem;
+.chb__header * {
+  margin: 0;
 }
 
-input,
-button,
-textarea,
-select {
-	padding: 1em 2em;
-	min-height: 0.875rem;
-	line-height: 1.5;
-	border: 1px solid #ddd;
-	border-radius: 0.5em;
-	background-color: #fff;
+.chb__form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.input-wrapper {
-	display: flex;
-	gap: 0.5rem;
-	flex-grow: 1;
+.chb__input-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  flex-grow: 1;
+  border-radius: var(--chb-border-radius);
+  border: 1px solid #999;
+  background-color: #f2f2f2;
+  align-items: center;
+  padding-inline: 0.5em;
+  overflow: hidden;
 }
 
-.input-wrapper input {
-	flex-grow: 1;
+.chb__input {
+  gap: 0.25rem;
+  flex-grow: 1;
+  padding: 1em;
+  border: 0;
+  background-color: #f2f2f2;
+  outline: none;
+}
+
+.chb__voice {
+  background-color: var(--chb-accent-color);
+  padding: 0.5em 1em;
+  border-radius: var(--chb-border-radius);
+  cursor: pointer;
+  border: 0;
+}
+
+.chb__voice > [data-chb-voice-icon] {
+    height: 2.5ex;
+    width: auto;
+    flex: none;
+    fill: currentColor;
+    display: none;
+}
+
+.chb__voice[data-chb-voice="off"] {
+  background-color: transparent;
+}
+
+.chb__voice[data-chb-voice="speaking"]::before {
+    content: "Speak now...";
+}
+
+.chb__voice[data-chb-voice="finished"]::before {
+    content: "Try again?";
+}
+
+.chb__voice[data-chb-voice="off"] > [data-chb-voice-icon] {
+    display: inline-block;
+}
+
+.chb__button {
+  background-color: var(--chb-accent-color);
+  padding: 1em 2em;
+  border: 0;
+  border-radius: 0.5em;
+  cursor: pointer;
 }
