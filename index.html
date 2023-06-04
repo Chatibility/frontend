@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chatibility</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<link rel="stylesheet" type="text/css" href="./style.css">
+	<script type="text/javascript" src="./speechToText.js" defer></script>
+	<script src="./script.js" defer></script>
+</head>
+<body>
+	<div class="card">
+		<header class="card__header">
+			<h1>Chatibility</h1>
+			<p id="status">Ask a question</p>
+		</header>
+
+		<hr />
+
+		<div class="card__body">
+			<div class="messages" id="messages"></div>
+
+			<form class="card__form" onsubmit="sendMessage(event)">
+				<div class="input-wrapper">
+					<input type="text" id="prompt" name="prompt" placeholder="Write your question"></input>
+					<button id="start-btn" type="button" class="button">
+						<i class="fa-solid fa-microphone-lines"></i>
+					</button>
+				</div>	
+				<button id="send-btn" type="submit" class="button primary">Send</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

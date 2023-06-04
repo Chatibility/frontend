@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: monospace;
+	padding-block: 3rem;
+	line-height: 1.5;
+}
+
+input,
+button,
+select,
+textarea {
+	font: inherit;
+}
+
+.button {
+	cursor: pointer;
+}
+
+.button.primary {
+	background-color: teal;
+	color: #fff;
+}
+
+.card {
+	width: min(100% - 2rem, 40rem);
+	margin-inline: auto;
+	background-color: #f4f4f4;
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+}
+
+.card__header {
+	text-align: center;
+}
+
+.card__body {
+	/*border: 1px solid red;*/
+	padding-block: 1rem;
+	display: grid;
+	gap: 1rem;
+}
+
+.messages {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.message {
+	padding: 0.5em 1em;
+	border-radius: 0.25rem;
+}
+
+.message[data-message="server"] {
+	background-color: #eee;
+}
+
+.message[data-message="client"] {
+	background-color: #ddd;
+}
+
+.message::before {
+	content: attr(data-message) ": ";
+	text-transform: capitalize;
+	font-weight: bold;
+}
+
+.card__form {
+	display: flex;
+	gap: 0.5rem;
+}
+
+input,
+button,
+textarea,
+select {
+	padding: 1em 2em;
+	min-height: 0.875rem;
+	line-height: 1.5;
+	border: 1px solid #ddd;
+	border-radius: 0.5em;
+	background-color: #fff;
+}
+
+.input-wrapper {
+	display: flex;
+	gap: 0.5rem;
+	flex-grow: 1;
+}
+
+.input-wrapper input {
+	flex-grow: 1;
+}
