@@ -13,12 +13,14 @@ body {
   --chb-header-spacing: 0.5rem;
   --chb-header-radius: 0.25em;
 
-  --chb-message-server: #fff;
-  --chb-message-client: #ddd;
+  --chb-message-background: #222;
+  --chb-message-background-server: #383838;
+  --chb-message-background-client: #2a2a2a;
+  --chb-message-color: #fff;
+  --chb-message-color-server: #eee;
+  --chb-message-color-client: #fff;
   --chb-message-width: 80%;
   --chb-message-padding: 0.5em 1.5em;
-  --chb-message-background: #f2f2f2;
-  --chb-message-color: #000;
   --chb-message-radius: 0.25em;
 
   --chb-input-padding: 0.5em 1em;
@@ -173,12 +175,14 @@ body {
 
 .chb__message[data-chb-message="server"] {
   justify-self: start;
-  background-color: var(--chb-message-server);
+  background-color: var(--chb-message-background-server);
+  color: var(--chb-message-color-server);
 }
 
 .chb__message[data-chb-message="client"] {
   justify-self: end;
-  background-color: var(--chb-message-client);
+  background-color: var(--chb-message-background-client);
+  color: var(--chb-message-color-client);
 }
 
 .chb__form {
