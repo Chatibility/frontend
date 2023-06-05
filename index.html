@@ -13,12 +13,14 @@
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <button data-chb-open aria-controls="chatbot-container">Chat</button>
+    <button
+      data-chb-open
+      class="chb-open-btn"
+      aria-controls="chatbot-container"
+    >
+      Chat
+    </button>
 
-    <div
-      id="chatbot-container"
-      data-chb-visible="false"
-      aria-hidden="true"
-    ></div>
+    <div id="chatbot-container" data-chb-visible="true"></div>
   </body>
 </html>
