@@ -3,7 +3,9 @@ const CHATBOT_ID = window.chatbaseConfig.chatbotId;
 const chatbotContainer = document.getElementById("chatbot-container");
 
 if (!chatbotContainer) {
-    console.error("Please make sure to insert id attribute 'chatbot-container' in your HTML");
+  console.error(
+    "Please make sure to insert id attribute 'chatbot-container' in your HTML"
+  );
 }
 
 class SpeechToText {
@@ -69,7 +71,6 @@ class SpeechToText {
   }
 }
 
-
 class TextToSpeech {
   constructor(text) {
     this.text = text;
@@ -108,7 +109,7 @@ class Chatbot {
   }
 
   receiveMessage(event) {
-    const messages = document.querySelector("[data-chb-messages]");;
+    const messages = document.querySelector("[data-chb-messages]");
     const data = JSON.parse(event.data);
 
     if (data.sender === "bot") {
@@ -152,7 +153,7 @@ class Chatbot {
         default:
           // Handle any other types of messages
           break;
-        }
+      }
     } else {
       const div = document.createElement("div");
       div.className = "chb__message";
@@ -184,7 +185,7 @@ class Chatbot {
   }
 
   showStatus(message) {
-    const status = document.querySelector("[data-chb-status]");;
+    const status = document.querySelector("[data-chb-status]");
     status.innerHTML = message;
   }
 
@@ -207,8 +208,8 @@ class Chatbot {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    if (!chatbotContainer) return false;
-    chatbotContainer.innerHTML = `<div class="chb-wrapper">
+  if (!chatbotContainer) return false;
+  chatbotContainer.innerHTML = `<div class="chb-wrapper">
         <header class="chb__header">
           <h2 class="chb__title"><span>Chat</span>ibility</h2>
           <p data-chb-status class="chb__status">Ask your question</p>
@@ -232,78 +233,77 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("load", () => {
-    if (!chatbotContainer) return false;
-    const chatbot = new Chatbot(`ws://185.220.205.156:5050/chat/${CHATBOT_ID}`);
-    const speechToText = new SpeechToText();
-    speechToText.init();
+  if (!chatbotContainer) return false;
+  const chatbot = new Chatbot(`ws://185.220.205.156:5050/chat/${CHATBOT_ID}`);
+  const speechToText = new SpeechToText();
+  speechToText.init();
 
-    const voiceButton = document.querySelector("[data-chb-voice]");
-    const sendButton = document.querySelector("[data-chb-send]");
-    const inputElem = document.querySelector("[data-chb-prompt]");
-    const formElem = document.querySelector("[data-chb-form]");
-    const openButton = document.querySelector("[data-chb-open]");
-    const closeButton = document.querySelector("[data-chb-close]");
+  const voiceButton = document.querySelector("[data-chb-voice]");
+  const sendButton = document.querySelector("[data-chb-send]");
+  const inputElem = document.querySelector("[data-chb-prompt]");
+  const formElem = document.querySelector("[data-chb-form]");
+  const openButton = document.querySelector("[data-chb-open]");
+  const closeButton = document.querySelector("[data-chb-close]");
 
-    formElem.addEventListener("submit", handleFormSubmit);
+  formElem.addEventListener("submit", handleFormSubmit);
 
-    voiceButton.addEventListener("click", toggleSpeechToText);
+  voiceButton.addEventListener("click", toggleSpeechToText);
 
-    speechToText.attachResultListener(handleSpeechResult);
+  speechToText.attachResultListener(handleSpeechResult);
 
-    speechToText.attachEndListener(handleSpeechEnd);
+  speechToText.attachEndListener(handleSpeechEnd);
 
-    openButton.addEventListener("click", () => {
+  openButton.addEventListener("click", () => {
+    setChatbotVisibility(true);
+  });
+
+  closeButton.addEventListener("click", () => {
+    setChatbotVisibility(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.code === "Space") {
       setChatbotVisibility(true);
-    });
-
-    closeButton.addEventListener("click", () => {
+      inputElem.focus();
+    } else if (!event.ctrlKey && !event.metaKey && event.code === "Escape") {
       setChatbotVisibility(false);
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.ctrlKey && event.code === "Space") {
-        setChatbotVisibility(true);
-        inputElem.focus();
-      } else if (!event.ctrlKey && event.code === "Escape") {
-        setChatbotVisibility(false);
-      }
-    });
-
-    function setChatbotVisibility(visible) {
-      chatbotContainer.setAttribute("data-chb-visible", visible);
     }
+  });
 
+  function setChatbotVisibility(visible) {
+    chatbotContainer.setAttribute("data-chb-visible", visible);
+  }
 
-    function stopSpeechToText() {
-      if (speechToText.isSpeechStarted) {
-        speechToText.kill();
-        voiceButton.setAttribute("data-chb-voice", "off");
-      }
+  function stopSpeechToText() {
+    if (speechToText.isSpeechStarted) {
+      speechToText.kill();
+      voiceButton.setAttribute("data-chb-voice", "off");
     }
+  }
 
-    function handleFormSubmit(event) {
+  function handleFormSubmit(event) {
+    stopSpeechToText();
+    chatbot.sendMessage(event);
+    inputElem.value = "";
+  }
+
+  function toggleSpeechToText() {
+    if (speechToText.isSpeechStarted) {
       stopSpeechToText();
-      chatbot.sendMessage(event);
+    } else {
+      speechToText.start();
+      voiceButton.setAttribute("data-chb-voice", "speaking");
       inputElem.value = "";
     }
+  }
 
-    function toggleSpeechToText() {
-      if (speechToText.isSpeechStarted) {
-        stopSpeechToText();
-      } else {
-        speechToText.start();
-        voiceButton.setAttribute("data-chb-voice", "speaking");
-        inputElem.value = "";
-      }
-    }
+  function handleSpeechResult(result) {
+    stopSpeechToText();
+    inputElem.value = result;
+  }
 
-    function handleSpeechResult(result) {
-      stopSpeechToText();
-      inputElem.value = result;
-    }
-
-    function handleSpeechEnd() {
-      stopSpeechToText();
-      voiceButton.setAttribute("data-chb-voice", "finished");
-    }
+  function handleSpeechEnd() {
+    stopSpeechToText();
+    voiceButton.setAttribute("data-chb-voice", "finished");
+  }
 });
